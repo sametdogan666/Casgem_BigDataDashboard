@@ -51,4 +51,27 @@ public class CarRepository
         return count;
     }
 
+    public async Task<int> GetBeyazAracSayisiAsync()
+    {
+        using IDbConnection connection = new SqlConnection(_connectionString);
+        var cacheKey = "BeyazAracSayisi";
+        if (_memoryCache.TryGetValue(cacheKey, out int count))
+        {
+            return count;
+        }
+
+        connection.Open();
+        count = await connection.ExecuteScalarAsync<int>("SELECT COUNT(*) FROM PLATES WHERE COLOR = 'Beyaz'");
+
+        // Veriyi önbelleğe al
+        var cacheEntryOptions = new MemoryCacheEntryOptions
+        {
+            AbsoluteExpirationRelativeToNow = TimeSpan.FromMinutes(5) // Önbellekte 5 dakika tut
+        };
+
+        _memoryCache.Set(cacheKey, count, cacheEntryOptions);
+
+        return count;
+    }
+
 }
