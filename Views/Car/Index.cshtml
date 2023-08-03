@@ -1,0 +1,106 @@
+﻿@model IEnumerable<BigDataDashboard.DAL.Car>
+
+@{
+    Layout = null;
+}
+
+
+<h1>Plates Dashboard</h1>
+
+<p>Benzinli araç sayısı: @ViewData["BenzinliAracSayisi"]</p>
+
+<form asp-controller="Car" asp-action="Index" method="get">
+    <input type="text" name="searchString" placeholder="Arama yapın...">
+    <button type="submit">Ara</button>
+</form>
+
+<div id="loadingMessage" style="display:none">Veriler yükleniyor...</div>
+
+<table id="carTable" style="display:none">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>CAR ID</th>
+            <th>PLATE</th>
+            <th>LICENSEDATE</th>
+            <th>CITYNR</th>
+            <th>TITLE</th>
+            <th>BRAND</th>
+            <th>MODEL</th>
+            <th>YEAR_</th>
+            <th>FUEL</th>
+            <th>SHIFTTYPE</th>
+            <th>MOTORVOLUME</th>
+            <th>MOTORPOWER</th>
+            <th>COLOR</th>
+            <th>CASETYPE</th>
+        </tr>
+    </thead>
+    <tbody>
+        @if (Model != null)
+        {
+            foreach (var car in Model)
+            {
+                <tr>
+                    <td>@car.ID</td>
+                    <td>@car.CARID</td>
+                    <td>@car.PLATE</td>
+                    <td>@car.LICENSEDATE</td>
+                    <td>@car.CITYNR</td>
+                    <td>@car.TITLE</td>
+                    <td>@car.BRAND</td>
+                    <td>@car.MODEL</td>
+                    <td>@car.YEAR_</td>
+                    <td>@car.FUEL</td>
+                    <td>@car.SHIFTTYPE</td>
+                    <td>@car.MOTORVOLUME</td>
+                    <td>@car.MOTORPOWER</td>
+                    <td>@car.COLOR</td>
+                    <td>@car.CASETYPE</td>
+                    
+                </tr>
+            }
+        }
+    </tbody>
+</table>
+
+<p id="queryTime" style="display:none"></p>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+<script>
+    $(document).ready(function () {
+        $('form').submit(function () {
+            var searchString = $('input[name="searchString"]').val();
+            $('#loadingMessage').show();
+            $('#carTable').hide();
+            $('#queryTime').hide();
+            $.ajax({
+                url: '/Car/Search',
+                type: 'get',
+                data: { searchString: searchString },
+                success: function (data) {
+                    $('#loadingMessage').hide();
+                    $('#carTable tbody').empty();
+                    if (data.data.length > 0) {
+                        $.each(data.data, function (index, item) {
+                            var row = '<tr> <td>' + item.ID + '</td> <td>' + item.CARID + '</td> <td>' + item.PLATE + '</td> <td>' + item.LICENSEDATE + '</td> <td>' + item.CITYNR + '</td> <td>' + item.TITLE + '</td> <td>' + item.BRAND + '</td> <td>' + item.MODEL + '</td> <td>' + item.YEAR_ + '</td> <td>' + item.FUEL + '</td> <td>' + item.SHIFTTYPE + '</td> <td>' + item.MOTORVOLUME + '</td> <td>' + item.MOTORPOWER + '</td> <td>' + item.COLOR + '</td> <td>' + item.CASETYPE + '</td> </tr>';
+                            $('#carTable tbody').append(row);
+                        });
+                        $('#carTable').show();
+                        $('#queryTime').text('Sorgu süresi: ' + data.queryTime + ' milisaniye').show();
+                    } else {
+                        $('#carTable').hide();
+                        $('#queryTime').text('Sonuç bulunamadı.').show();
+                    }
+                },
+                error: function () {
+                    $('#loadingMessage').hide();
+                    alert('Veriler getirilirken bir hata oluştu.');
+                }
+            });
+            return false;
+        });
+    });
+</script>
+
