@@ -1,106 +1,369 @@
-﻿@model IEnumerable<BigDataDashboard.DAL.Car>
-
-@{
+﻿@{
     Layout = null;
 }
 
+<!DOCTYPE html>
+<html lang="en">
 
-<h1>Plates Dashboard</h1>
+<head>
+    <!-- Required meta tags-->
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="au theme template">
+    <meta name="author" content="Hau Nguyen">
+    <meta name="keywords" content="au theme template">
 
-<p>Benzinli araç sayısı: @ViewData["BenzinliAracSayisi"]</p>
+    <!-- Title Page-->
+    <title>Big Data Dashboard</title>
 
-<form asp-controller="Car" asp-action="Index" method="get">
-    <input type="text" name="searchString" placeholder="Arama yapın...">
-    <button type="submit">Ara</button>
-</form>
+    <!-- Fontfaces CSS-->
+    <link href="~/CoolAdmin-master/css/font-face.css" rel="stylesheet" media="all">
+    <link href="~/CoolAdmin-master/vendor/font-awesome-4.7/css/font-awesome.min.css" rel="stylesheet" media="all">
+    <link href="~/CoolAdmin-master/vendor/font-awesome-5/css/fontawesome-all.min.css" rel="stylesheet" media="all">
+    <link href="~/CoolAdmin-master/vendor/mdi-font/css/material-design-iconic-font.min.css" rel="stylesheet" media="all">
 
-<div id="loadingMessage" style="display:none">Veriler yükleniyor...</div>
+    <!-- Bootstrap CSS-->
+    <link href="~/CoolAdmin-master/vendor/bootstrap-4.1/bootstrap.min.css" rel="stylesheet" media="all">
 
-<table id="carTable" style="display:none">
-    <thead>
-        <tr>
-            <th>ID</th>
-            <th>CAR ID</th>
-            <th>PLATE</th>
-            <th>LICENSEDATE</th>
-            <th>CITYNR</th>
-            <th>TITLE</th>
-            <th>BRAND</th>
-            <th>MODEL</th>
-            <th>YEAR_</th>
-            <th>FUEL</th>
-            <th>SHIFTTYPE</th>
-            <th>MOTORVOLUME</th>
-            <th>MOTORPOWER</th>
-            <th>COLOR</th>
-            <th>CASETYPE</th>
-        </tr>
-    </thead>
-    <tbody>
-        @if (Model != null)
-        {
-            foreach (var car in Model)
-            {
-                <tr>
-                    <td>@car.ID</td>
-                    <td>@car.CARID</td>
-                    <td>@car.PLATE</td>
-                    <td>@car.LICENSEDATE</td>
-                    <td>@car.CITYNR</td>
-                    <td>@car.TITLE</td>
-                    <td>@car.BRAND</td>
-                    <td>@car.MODEL</td>
-                    <td>@car.YEAR_</td>
-                    <td>@car.FUEL</td>
-                    <td>@car.SHIFTTYPE</td>
-                    <td>@car.MOTORVOLUME</td>
-                    <td>@car.MOTORPOWER</td>
-                    <td>@car.COLOR</td>
-                    <td>@car.CASETYPE</td>
-                    
-                </tr>
-            }
-        }
-    </tbody>
-</table>
+    <!-- Vendor CSS-->
+    <link href="~/CoolAdmin-master/vendor/animsition/animsition.min.css" rel="stylesheet" media="all">
+    <link href="~/CoolAdmin-master/vendor/bootstrap-progressbar/bootstrap-progressbar-3.3.4.min.css" rel="stylesheet" media="all">
+    <link href="~/CoolAdmin-master/vendor/wow/animate.css" rel="stylesheet" media="all">
+    <link href="~/CoolAdmin-master/vendor/css-hamburgers/hamburgers.min.css" rel="stylesheet" media="all">
+    <link href="~/CoolAdmin-master/vendor/slick/slick.css" rel="stylesheet" media="all">
+    <link href="~/CoolAdmin-master/vendor/select2/select2.min.css" rel="stylesheet" media="all">
+    <link href="~/CoolAdmin-master/vendor/perfect-scrollbar/perfect-scrollbar.css" rel="stylesheet" media="all">
 
-<p id="queryTime" style="display:none"></p>
+    <!-- Main CSS-->
+    <link href="~/CoolAdmin-master/css/theme.css" rel="stylesheet" media="all">
 
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
 
-<script>
-    $(document).ready(function () {
-        $('form').submit(function () {
-            var searchString = $('input[name="searchString"]').val();
-            $('#loadingMessage').show();
-            $('#carTable').hide();
-            $('#queryTime').hide();
-            $.ajax({
-                url: '/Car/Search',
-                type: 'get',
-                data: { searchString: searchString },
-                success: function (data) {
-                    $('#loadingMessage').hide();
-                    $('#carTable tbody').empty();
-                    if (data.data.length > 0) {
-                        $.each(data.data, function (index, item) {
-                            var row = '<tr> <td>' + item.ID + '</td> <td>' + item.CARID + '</td> <td>' + item.PLATE + '</td> <td>' + item.LICENSEDATE + '</td> <td>' + item.CITYNR + '</td> <td>' + item.TITLE + '</td> <td>' + item.BRAND + '</td> <td>' + item.MODEL + '</td> <td>' + item.YEAR_ + '</td> <td>' + item.FUEL + '</td> <td>' + item.SHIFTTYPE + '</td> <td>' + item.MOTORVOLUME + '</td> <td>' + item.MOTORPOWER + '</td> <td>' + item.COLOR + '</td> <td>' + item.CASETYPE + '</td> </tr>';
-                            $('#carTable tbody').append(row);
-                        });
-                        $('#carTable').show();
-                        $('#queryTime').text('Sorgu süresi: ' + data.queryTime + ' milisaniye').show();
-                    } else {
-                        $('#carTable').hide();
-                        $('#queryTime').text('Sonuç bulunamadı.').show();
+<body class="animsition">
+    <div class="page-wrapper">
+        <!-- HEADER DESKTOP-->
+        <header class="header-desktop3 d-none d-lg-block">
+            <div class="section__content section__content--p35">
+                <div class="header3-wrap">
+                    <div class="header__logo">
+                        <a href="#">
+                            <img src="~/CoolAdmin-master/images/icon/logo-white.png" alt="BİG DATA DASHBOARD" />
+                        </a>
+                    </div>
+                    <div class="header__navbar">
+                    </div>
+                    <div class="header__tool">
+                        <div class="account-wrap">
+                            <div class="account-item account-item--style2 clearfix js-item-menu">
+                                <div class="image">
+                                    <img src="~/CoolAdmin-master/images/icon/avatar-01.jpg" alt="John Doe" />
+                                </div>
+                                <div class="content">
+                                    <a class="js-acc-btn">BİG DATA DASHBOARD</a>
+                                </div>
+                                <div class="account-dropdown js-dropdown">
+                                    <div class="info clearfix">
+                                        <div class="image">
+                                            <a href="#">
+                                                <img src="~/CoolAdmin-master/images/icon/avatar-01.jpg" alt="John Doe" />
+                                            </a>
+                                        </div>
+
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </header>
+        <!-- END HEADER DESKTOP-->
+        <!-- HEADER MOBILE-->
+        <!-- END HEADER MOBILE -->
+        <!-- PAGE CONTENT-->
+        <div class="page-content--bgf7">
+
+            <!-- WELCOME-->
+            <section class="welcome p-t-10">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <h1 class="title-4">
+                                Hoşgeldiniz.
+
+                            </h1>
+                            <hr class="line-seprate">
+                        </div>
+                    </div>
+                </div>
+            </section>
+            <!-- END WELCOME-->
+            <!-- STATISTIC-->
+            <section class="statistic statistic2">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-md-6 col-lg-3">
+                            <div class="statistic__item statistic__item--green">
+                                <h2 class="number">@ViewData["BenzinliAracSayisi"]</h2>
+                                <span class="desc">Benzinli Araç Sayısı</span>
+                                <div class="icon">
+                                    <i class="zmdi zmdi-account-o"></i>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6 col-lg-3">
+                            <div class="statistic__item statistic__item--orange">
+                                <h2 class="number">@ViewData["BeyazAracSayisi"]</h2>
+                                <span class="desc">Beyaz Araç Sayısı</span>
+                                <div class="icon">
+                                    <i class="zmdi zmdi-shopping-cart"></i>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6 col-lg-3">
+                            <div class="statistic__item statistic__item--blue">
+                                <h2 class="number">@ViewData["OtomatikAracSayisi"]</h2>
+                                <span class="desc">Otomatik Vites Araç Sayısı</span>
+                                <div class="icon">
+                                    <i class="zmdi zmdi-calendar-note"></i>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6 col-lg-3">
+                            <div class="statistic__item statistic__item--red">
+                                <h2 class="number">@ViewData["SedanAracSayisi"]</h2>
+                                <span class="desc">Sedan Araç Sayısı</span>
+                                <div class="icon">
+                                    <i class="zmdi zmdi-money"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            <!-- END STATISTIC-->
+            <!-- STATISTIC CHART-->
+            <section class="statistic-chart">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <h3 class="title-5 m-b-35">statistics</h3>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6 col-lg-4">
+                            <!-- TOP CAMPAIGN-->
+                            <div class="top-campaign">
+                                <h3 class="title-3 m-b-30">top campaigns</h3>
+                                <div class="table-responsive">
+                                    <table class="table table-top-campaign">
+                                        <tbody>
+                                            <tr>
+                                                <td>1. Australia</td>
+                                                <td>$70,261.65</td>
+                                            </tr>
+                                            <tr>
+                                                <td>2. United Kingdom</td>
+                                                <td>$46,399.22</td>
+                                            </tr>
+                                            <tr>
+                                                <td>3. Turkey</td>
+                                                <td>$35,364.90</td>
+                                            </tr>
+                                            <tr>
+                                                <td>4. Germany</td>
+                                                <td>$20,366.96</td>
+                                            </tr>
+                                            <tr>
+                                                <td>5. France</td>
+                                                <td>$10,366.96</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                            <!-- END TOP CAMPAIGN-->
+                        </div>
+                        <div class="col-md-6 col-lg-4">
+                            <!-- CHART PERCENT-->
+                            <div class="chart-percent-2">
+                                <h3 class="title-3 m-b-30">chart by %</h3>
+                                <div class="chart-wrap">
+                                    <canvas id="percent-chart2"></canvas>
+                                    <div id="chartjs-tooltip">
+                                        <table></table>
+                                    </div>
+                                </div>
+                                <div class="chart-info">
+                                    <div class="chart-note">
+                                        <span class="dot dot--blue"></span>
+                                        <span>products</span>
+                                    </div>
+                                    <div class="chart-note">
+                                        <span class="dot dot--red"></span>
+                                        <span>Services</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- END CHART PERCENT-->
+                        </div>
+                    </div>
+                </div>
+            </section>
+            <!-- END STATISTIC CHART-->
+            <!-- DATA TABLE-->
+            <section class="p-t-20">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <h3 class="title-5 m-b-35">Araç Sorgula</h3>
+                            <form asp-controller="Car" asp-action="Index" method="get">
+                                <input type="text" name="searchString" placeholder="Arama yapın...">
+                                <button type="submit">Ara</button>
+                            </form>
+
+                            <div id="loadingMessage" style="display:none">Veriler yükleniyor...</div>
+                            <div class="table-responsive table-responsive-data2">
+                                <table class="table table-data2" id="carTable">
+                                    <thead>
+                                        <tr>
+                                            <th>ID</th>
+                                            <th>ARAÇ ID</th>
+                                            <th>PLAKA</th>
+                                            <th>ŞEHİR NO</th>
+                                            <th>BAŞLIK</th>
+                                            <th>MARKA</th>
+                                            <th>MODEL</th>
+                                            <th>YIL</th>
+                                            <th>YAKIT</th>
+                                            <th>VİTES</th>
+                                            <th>MOTOR</th>
+                                            <th>BEYGİR</th>
+                                            <th>RENK</th>
+                                            <th>KASA</th>
+                                            <th></th>
+                                        </tr>
+                                    </thead>
+
+                                    <tbody>
+                                        @if (Model != null)
+                                        {
+                                            foreach (var car in Model)
+                                            {
+                                                <tr class="tr-shadow">
+                                                    <td>@car.ID</td>
+                                                    <td>@car.CARID</td>
+                                                    <td>@car.PLATE</td>
+                                                    <td>@car.CITYNR</td>
+                                                    <td>@car.TITLE</td>
+                                                    <td>@car.BRAND</td>
+                                                    <td>@car.MODEL</td>
+                                                    <td>@car.YEAR_</td>
+                                                    <td>@car.FUEL</td>
+                                                    <td>@car.SHIFTTYPE</td>
+                                                    <td>@car.MOTORVOLUME</td>
+                                                    <td>@car.MOTORPOWER</td>
+                                                    <td>@car.COLOR</td>
+                                                    <td>@car.CASETYPE</td>
+
+                                                </tr>
+                                            }
+                                        }
+                                    </tbody>
+                                </table>
+                                <p id="queryTime" style="display:none"></p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            <!-- END DATA TABLE-->
+            <!-- COPYRIGHT-->
+            <section class="p-t-60 p-b-20">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="copyright">
+                                <p>Copyright © 2018 Colorlib. All rights reserved. Template by <a href="https://colorlib.com">Colorlib</a>.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            <!-- END COPYRIGHT-->
+        </div>
+
+    </div>
+
+    <!-- Jquery JS-->
+    <script src="~/CoolAdmin-master/vendor/jquery-3.2.1.min.js"></script>
+    <!-- Bootstrap JS-->
+    <script src="~/CoolAdmin-master/vendor/bootstrap-4.1/popper.min.js"></script>
+    <script src="~/CoolAdmin-master/vendor/bootstrap-4.1/bootstrap.min.js"></script>
+    <!-- Vendor JS       -->
+    <script src="~/CoolAdmin-master/vendor/slick/slick.min.js">
+    </script>
+    <script src="~/CoolAdmin-master/vendor/wow/wow.min.js"></script>
+    <script src="~/CoolAdmin-master/vendor/animsition/animsition.min.js"></script>
+    <script src="~/CoolAdmin-master/vendor/bootstrap-progressbar/bootstrap-progressbar.min.js">
+    </script>
+    <script src="~/CoolAdmin-master/vendor/counter-up/jquery.waypoints.min.js"></script>
+    <script src="~/CoolAdmin-master/vendor/counter-up/jquery.counterup.min.js">
+    </script>
+    <script src="~/CoolAdmin-master/vendor/circle-progress/circle-progress.min.js"></script>
+    <script src="~/CoolAdmin-master/vendor/perfect-scrollbar/perfect-scrollbar.js"></script>
+    <script src="~/CoolAdmin-master/vendor/chartjs/Chart.bundle.min.js"></script>
+    <script src="~/CoolAdmin-master/vendor/select2/select2.min.js">
+    </script>
+
+    <!-- Main JS-->
+    <script src="~/CoolAdmin-master/js/main.js"></script>
+
+
+    <script>
+        $(document).ready(function () {
+            $('form').submit(function () {
+                var searchString = $('input[name="searchString"]').val();
+                $('#loadingMessage').show();
+                $('#carTable').hide();
+                $('#queryTime').hide();
+                $.ajax({
+                    url: '/Car/Search',
+                    type: 'get',
+                    dataType: "json",
+                    data: { searchString: searchString },
+                    timeout: 15000,
+                        success: function (data) {
+                        $('#loadingMessage').hide();
+                        $('#carTable tbody').empty();
+                        if (data.data.length > 0) {
+                            $.each(JSON.parse(data.data), function (index, item) {
+                                var row = '<tr> <td>' + item.ID + '</td> <td>' + item.CARID + '</td> <td>' + item.PLATE + '</td> <td>' + item.CITYNR + '</td> <td>' + item.TITLE + '</td> <td>' + item.BRAND + '</td> <td>' + item.MODEL + '</td> <td>' + item.YEAR_ + '</td> <td>' + item.FUEL + '</td> <td>' + item.SHIFTTYPE + '</td> <td>' + item.MOTORVOLUME + '</td> <td>' + item.MOTORPOWER + '</td> <td>' + item.COLOR + '</td> <td>' + item.CASETYPE + '</td> </tr>';
+                                $('#carTable tbody').append(row);
+                            });
+                            $('#carTable').show();
+                            $('#queryTime').text('Sorgu süresi: ' + data.queryTime + '  saniye').show();
+                        } else {
+                            $('#carTable').hide();
+                            $('#queryTime').text('Sonuç bulunamadı.').show();
+                        }
+                    },
+                    error: function () {
+                        $('#loadingMessage').hide();
+                        // Hata oluştuğunda ayrıntılı hata mesajı göstermek için consola log yazdırabilirsiniz
+                        console.log('Veriler getirilirken bir hata oluştu.');
                     }
-                },
-                error: function () {
-                    $('#loadingMessage').hide();
-                    alert('Veriler getirilirken bir hata oluştu.');
-                }
+                });
+                return false;
             });
-            return false;
         });
-    });
-</script>
+    </script>
 
+
+
+
+</body>
+
+</html>
+<!-- end document-->
