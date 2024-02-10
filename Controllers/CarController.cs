@@ -19,7 +19,7 @@ public class CarController : Controller
         _memoryCache = memoryCache;
     }
 
-    public async Task<IActionResult> Index(string searchString)
+    public async Task<IActionResult> Index()
     {
         var benzinliAracSayisi = await _carRepository.GetBenzinliAracSayisiAsync();
         ViewData["BenzinliAracSayisi"] = benzinliAracSayisi;
